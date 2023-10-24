@@ -1,3 +1,34 @@
+// this is the format for the dates
+var today = moment().format("dddd, MMMM Do YYYY ");
+
+var now = moment().format("H A");
+
+/* planWorkday entries for each hour of the American workday */
+var planWorkday = [
+  { time: "9 AM", 
+      event: "" },
+  { time: "10 AM", 
+      event: "" },
+  { time: "11 AM", 
+      event: "" },
+  { time: "12 PM", 
+      event: "" },
+  { time: "1 PM", 
+      event: "" },
+  { time: "2 PM", 
+      event: "" },
+  { time: "3 PM", 
+      event: "" },
+  { time: "4 PM", 
+      event: "" },
+  { time: "5 PM", 
+      event: "" },
+];
+
+var workEvents = JSON.parse(localStorage.getItem("workDay"));
+if (workEvents) {
+  planWorkday = workEvents;
+}
 // Wrap all code that interacts with the DOM in a call to jQuery to ensure that
 // the code isn't run until the browser has finished rendering all the elements
 // in the html.
@@ -14,10 +45,27 @@ $(function () {
   // attribute of each time-block be used to conditionally add or remove the
   // past, present, and future classes? How can Day.js be used to get the
   // current hour in 24-hour time?
+  $("#currentDay").text(today);
   //
   // TODO: Add code to get any user input that was saved in localStorage and set
   // the values of the corresponding textarea elements. HINT: How can the id
   // attribute of each time-block be used to do this?
   //
   // TODO: Add code to display the current date in the header of the page.
+});
+//saves the events on the planner
+$(".saveBtn").on("click", function() {
+	var blockID = parseInt(
+		$(this)
+			.closest(".time-block")
+			.attr("id")
+	);
+	var userEntry = $.trim(
+		$(this)
+			.parent()
+			.siblings("textarea")
+			.val()
+	);
+	planWorkday[blockID].event = userEntry;
+  localStorage.setItem("workDay", JSON.stringify(planWorkday));
 });
